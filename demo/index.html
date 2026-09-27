@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1f3f48">
+  <meta name="description" content="Ditch AI. Send an empty packet. It should stay here.">
+  <title>Ditch AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sand: #efe6d4;
+      --cream: #f7f1e4;
+      --ink: #1b241c;
+      --muted: #5a6658;
+      --water: #3d6b78;
+      --deep: #1f3f48;
+      --earth: #8a6a48;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--sand); color: var(--ink); }
+    body {
+      margin: 0;
+      font: 400 1.125rem/1.45 "Source Sans 3", "Source Sans Pro", sans-serif;
+      background: var(--sand);
+    }
+    .skip {
+      position: absolute;
+      left: 0.75rem;
+      top: -3rem;
+      background: var(--cream);
+      color: var(--ink);
+      padding: 0.7rem 1rem;
+      z-index: 3;
+    }
+    .skip:focus { top: 0.75rem; }
+    header {
+      background: var(--deep);
+      color: var(--cream);
+    }
+    .bar, main, footer {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 1rem 1.25rem;
+    }
+    .mark {
+      margin: 0;
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+    }
+    .draft { margin: 0.15rem 0 0; color: #d5e2e4; font-size: 0.95rem; }
+    main { display: grid; gap: 1.25rem; padding-top: 1.5rem; padding-bottom: 3rem; }
+    h1 {
+      margin: 0 0 0.35rem;
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 650;
+      font-size: clamp(2.6rem, 7vw, 4.8rem);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+    .lead { margin: 0 0 1rem; font-size: 1.3rem; color: var(--muted); }
+    .hero, .card, .bench {
+      background: var(--cream);
+      border-radius: 1rem;
+      padding: 1.15rem;
+    }
+    .hero { background: var(--deep); color: var(--cream); }
+    .hero .lead { color: #d5e2e4; }
+    .plate {
+      margin: 0 0 0.8rem;
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 650;
+      font-size: clamp(3rem, 12vw, 5rem);
+      line-height: 0.9;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .btn {
+      min-height: 48px;
+      padding: 0.75rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font: 600 1rem/1 "Source Sans 3", sans-serif;
+      cursor: pointer;
+      background: transparent;
+      color: inherit;
+    }
+    .btn.primary {
+      width: 100%;
+      background: var(--cream);
+      color: var(--deep);
+    }
+    .btn.ghost { border-color: rgba(27, 36, 28, 0.25); color: var(--ink); }
+    .hero .btn.ghost { border-color: rgba(247, 241, 228, 0.4); color: var(--cream); }
+    .row, .seal, .checks { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.75rem; }
+    .row .btn, .seal .btn { flex: 1 1 9rem; }
+    .verdict {
+      min-height: 3rem;
+      margin: 0.85rem 0 0;
+      padding: 0.8rem 0.9rem;
+      border-radius: 0.75rem;
+      background: rgba(0, 0, 0, 0.18);
+    }
+    .bench .verdict { background: rgba(31, 63, 72, 0.08); }
+    label { display: grid; gap: 0.3rem; flex: 1 1 12rem; color: var(--muted); font-size: 0.95rem; }
+    .hero label { color: #d5e2e4; }
+    input[type="password"], input[type="text"], input[type="number"] {
+      min-height: 48px;
+      border-radius: 0.7rem;
+      border: 1px solid rgba(27, 36, 28, 0.2);
+      background: var(--sand);
+      color: var(--ink);
+      font: inherit;
+      padding: 0 0.8rem;
+    }
+    .trio { display: grid; gap: 0.8rem; }
+    @media (min-width: 860px) {
+      .trio { grid-template-columns: repeat(2, 1fr); }
+    }
+    h2 {
+      margin: 0 0 0.25rem;
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 650;
+      font-size: clamp(1.5rem, 3vw, 1.9rem);
+    }
+    .kicker { margin: 0 0 0.45rem; color: var(--water); font-weight: 700; }
+    .card p:last-child, .hint { margin: 0; color: var(--muted); }
+    .checks label {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-height: 48px;
+      color: var(--ink);
+    }
+    .tape {
+      list-style: none;
+      margin: 0.8rem 0 0;
+      padding: 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .tape li {
+      padding: 0.35rem 0;
+      border-top: 1px solid rgba(27, 36, 28, 0.12);
+    }
+    footer { color: var(--muted); padding-bottom: 2.5rem; }
+    footer a { color: var(--water); }
+    :focus-visible { outline: 3px solid var(--earth); outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the gate</a>
+  <header>
+    <div class="bar">
+      <p class="mark">Ditch AI</p>
+      <p class="draft">Draft 2026. Not ratified.</p>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <h1>Send an empty packet.</h1>
+      <p class="lead">It should stay here.</p>
+      <p class="plate" id="plate">Shut</p>
+      <button class="btn primary" id="send" type="button">Send empty packet</button>
+      <p class="verdict" id="verdict" role="status">Nothing sent yet.</p>
+    </section>
+
+    <section class="trio" aria-label="Three gates">
+      <article class="card">
+        <h2>Headgate Standard</h2>
+        <p class="kicker">Deterministic. No keys. Append-only.</p>
+        <p>The same facts produce the same decision. The line only grows. A key never sits in the record.</p>
+      </article>
+      <article class="card">
+        <h2>Frontier Headgate</h2>
+        <p class="kicker">The API gate.</p>
+        <p>A call stops here before a frontier model runs. This page does not pretend that wire is live.</p>
+      </article>
+      <article class="card" id="egress">
+        <h2>Egress Headgate</h2>
+        <p class="kicker">Every way out.</p>
+        <p>This bench is one egress. The same clamp can sit on a file, a letter, a socket, or a reply.</p>
+      </article>
+      <article class="card">
+        <h2>Slop</h2>
+        <p class="kicker">The olive branch.</p>
+        <p>This is how the work becomes useful. A Headgate sits on it. Slopstream carries it.</p>
+      </article>
+    </section>
+
+    <section class="bench" aria-label="Egress bench">
+      <h2>Name the way out</h2>
+      <p class="hint">No name yet, so the witness stays unknown. Unknown is not shut.</p>
+      <div class="row">
+        <label>Way out
+          <input id="way" type="text" autocomplete="off" placeholder="file, letter, socket, reply">
+        </label>
+        <button class="btn ghost" id="send-n" type="button">Send this many</button>
+        <label>Bytes
+          <input id="bytes" type="number" min="0" step="1" value="8">
+        </label>
+      </div>
+      <div class="checks">
+        <label><input id="up" type="checkbox"> It is up</label>
+        <label><input id="blocked" type="checkbox" checked> Packets drop</label>
+        <label><input id="moved" type="checkbox"> Bytes have moved</label>
+      </div>
+      <p class="verdict" id="witness-out" role="status">Unknown.</p>
+      <div class="row">
+        <button class="btn ghost" id="look" type="button">Look for a peer</button>
+        <button class="btn ghost" id="break" type="button">Break the check</button>
+      </div>
+      <form class="seal" id="seal-form">
+        <label>Current seal (to change it)
+          <input id="seal-current" type="password" autocomplete="off" placeholder="Current seal">
+        </label>
+        <label>Seal
+          <input id="seal" type="password" autocomplete="off" placeholder="Type a seal">
+        </label>
+        <button class="btn ghost" id="set" type="button">Set seal</button>
+        <button class="btn ghost" id="open" type="submit">Open</button>
+        <button class="btn ghost" id="shut" type="button">Shut</button>
+      </form>
+      <ol class="tape" id="tape"></ol>
+    </section>
+  </main>
+  <footer>
+    <div class="bar">
+      Ditch AI. Draft 2026. Not ratified.
+      <a href="../SPEC.md">Egress rules</a>
+    </div>
+  </footer>
+  <script>
+    const model = { mac: null, record: null, receipts: [], broken: false };
+
+    function effectiveOpen() {
+      let last = null;
+      for (const row of model.receipts) {
+        if (row.verb === "open" || row.verb === "close") last = row;
+      }
+      return !!(model.record && model.record.state === "open" && model.record.seal === "human" && last && last.verb === "open" && last.mood === "ALLOW");
+    }
+
+    function paint() {
+      const plate = document.getElementById("plate");
+      plate.textContent = effectiveOpen() ? "Open" : "Shut";
+    }
+
+    function say(text) {
+      document.getElementById("verdict").textContent = text;
+    }
+
+    function append(verb, mood, remembered) {
+      if (remembered) model.receipts.push({ verb: verb, mood: mood });
+      const item = document.createElement("li");
+      item.textContent = (document.getElementById("tape").children.length + 1) + "  " + verb + "  " + mood;
+      document.getElementById("tape").appendChild(item);
+    }
+
+    async function digest(secret) {
+      const bytes = new TextEncoder().encode(secret.trim());
+      const buf = await crypto.subtle.digest("SHA-256", bytes);
+      return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    function failClosed() {
+      if (!model.broken) return false;
+      model.broken = false;
+      append("check", "DENY");
+      say("Denied. The check failed, so this answer is shut.");
+      return true;
+    }
+
+    function admit(length) {
+      if (failClosed()) return;
+      if (!Number.isInteger(length) || length < 0) {
+        append("admit", "DENY");
+        say("Denied. That length is no good.");
+        return;
+      }
+      if (!effectiveOpen()) {
+        append("admit", "DENY");
+        say(length === 0 ? "Denied. It stayed on this side. Empty still counts." : "Denied. It stayed on this side.");
+        return;
+      }
+      append("admit", "ALLOW");
+      say(length === 0 ? "The empty one went through." : "Those bytes went through.");
+    }
+
+    function witness() {
+      const name = document.getElementById("way").value.trim();
+      const up = document.getElementById("up").checked;
+      const blocked = document.getElementById("blocked").checked;
+      const moved = document.getElementById("moved").checked;
+      const node = document.getElementById("witness-out");
+      if (!name) {
+        node.textContent = "Unknown. A missing name is not a shut gate.";
+        return;
+      }
+      if (up) {
+        node.textContent = name + " is showing. Someone can see this way out.";
+        return;
+      }
+      if (!blocked || moved) {
+        node.textContent = moved ? name + ": bytes moved." : name + ": packets are not dropping.";
+        return;
+      }
+      node.textContent = name + " is still. Down, dropping, and quiet.";
+    }
+
+    document.getElementById("send").addEventListener("click", () => admit(0));
+    document.getElementById("send-n").addEventListener("click", () => admit(Number(document.getElementById("bytes").value)));
+    document.getElementById("look").addEventListener("click", () => {
+      if (failClosed()) return;
+      if (!effectiveOpen()) {
+        append("discover", "DENY");
+        say("Denied. No one is there.");
+      } else {
+        append("discover", "ALLOW");
+        say("Someone answered.");
+      }
+    });
+    document.getElementById("break").addEventListener("click", () => {
+      model.broken = true;
+      say("The next check will fail.");
+    });
+    document.getElementById("set").addEventListener("click", async () => {
+      const raw = document.getElementById("seal").value;
+      const current = document.getElementById("seal-current").value;
+
+      if (!raw.trim()) {
+        say("That was blank.");
+        document.getElementById("seal").value = "";
+        document.getElementById("seal-current").value = "";
+        return;
+      }
+
+      if (effectiveOpen()) {
+        say("Shut it before changing the seal.");
+        document.getElementById("seal").value = "";
+        document.getElementById("seal-current").value = "";
+        return;
+      }
+
+      if (model.mac === null) {
+        model.mac = await digest(raw);
+        append("seal", "SET");
+        say("Seal set. Still shut. The seal is not on the tape.");
+      } else {
+        if (!current.trim()) {
+          say("Changing the seal needs the current seal.");
+          append("seal", "DENY");
+        } else {
+          const currentDigest = await digest(current);
+          if (currentDigest !== model.mac) {
+            say("Changing the seal needs the current seal.");
+            append("seal", "DENY");
+          } else {
+            model.mac = await digest(raw);
+            append("seal", "ROTATE");
+            say("Seal changed. Still shut.");
+          }
+        }
+      }
+
+      document.getElementById("seal").value = "";
+      document.getElementById("seal-current").value = "";
+    });
+    document.getElementById("seal-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const raw = document.getElementById("seal").value;
+      if (!raw.trim()) {
+        say("That was blank.");
+        return;
+      }
+      if (!model.mac) {
+        say("Set a seal first.");
+        return;
+      }
+      const got = await digest(raw);
+      document.getElementById("seal").value = "";
+      if (got !== model.mac) {
+        append("open", "DENY");
+        say("That seal does not match.");
+        return;
+      }
+      append("open", "ALLOW", true);
+      model.record = { state: "open", seal: "human" };
+      paint();
+      say("Open.");
+    });
+    document.getElementById("shut").addEventListener("click", () => {
+      append("close", "SHUT", true);
+      model.record = { state: "sealed", seal: "auto" };
+      paint();
+      say("Shut.");
+    });
+    for (const id of ["way", "up", "blocked", "moved"]) {
+      document.getElementById(id).addEventListener("input", witness);
+      document.getElementById(id).addEventListener("change", witness);
+    }
+    paint();
+  </script>
+</body>
+</html>

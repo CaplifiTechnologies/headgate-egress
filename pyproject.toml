@@ -1,0 +1,18 @@
+[project]
+name = "headgate-egress"
+version = "0.1.0"
+description = "Reference implementation of Egress Headgate. Resting state passes nothing."
+requires-python = ">=3.11"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+
+[project.scripts]
+headgate-egress = "headgate_egress.__main__:main"
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
